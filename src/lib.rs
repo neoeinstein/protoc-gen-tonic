@@ -22,7 +22,7 @@ pub fn execute(raw_request: &[u8]) -> protoc_gen_prost::Result {
         request.file_to_generate,
         request.proto_file,
         raw_request,
-        params.default_package_filename(),
+        params.default_package_filename.as_deref(),
     )?;
 
     let resolver = Resolver::new(params.extern_path, params.compile_well_known_types);
@@ -61,12 +61,6 @@ static PARAMETER: Lazy<regex::Regex> = Lazy::new(|| {
     )
     .unwrap()
 });
-
-impl Parameters {
-    fn default_package_filename(&self) -> &str {
-        self.default_package_filename.as_deref().unwrap_or("_")
-    }
-}
 
 impl str::FromStr for Parameters {
     type Err = InvalidParameter;
